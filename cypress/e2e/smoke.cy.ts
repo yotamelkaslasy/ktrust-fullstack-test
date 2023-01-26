@@ -5,7 +5,7 @@ describe("smoke tests", () => {
     cy.cleanupUser();
   });
 
-  it("should allow you to register and login", () => {
+  it("should allow you to signup", () => {
     const loginForm = {
       email: `${faker.internet.userName()}@example.com`,
       password: faker.internet.password(),
@@ -15,12 +15,32 @@ describe("smoke tests", () => {
 
     cy.visitAndCheck("/signup");
 
-    cy.get("form")
-      .findByRole("button", { name: /Signup/i })
-      .should("exist");
+    cy.get('input[name="email"]').should("exist");
+    cy.get('input[name="password"]').should("exist");
 
-    cy.findByRole("input", { name: /email/i }).type(loginForm.email);
-    cy.findByLabelText(/password/i).type(loginForm.password);
-    cy.findByRole("button", { name: /Signup/i }).click();
+    cy.get('input[name="email"]').type(loginForm.email);
+    cy.get('input[name="password"]').type(loginForm.password);
+
+    cy.get('button[type="submit"]').click();
+  });
+
+  it("should allow you to login", () => {
+    const loginForm = {
+      email: `${faker.internet.userName()}@example.com`,
+      password: faker.internet.password(),
+    };
+
+    cy.then(() => ({ email: loginForm.email })).as("user");
+
+    cy.visitAndCheck("/login");
+
+    cy.get('input[name="email"]').should("exist");
+    cy.get('input[name="password"]').should("exist");
+    cy.get('button[type="submit"]').should("exist");
+
+    cy.get('input[name="email"]').type(loginForm.email);
+    cy.get('input[name="password"]').type(loginForm.password);
+
+    cy.get('button[type="submit"]').click();
   });
 });
