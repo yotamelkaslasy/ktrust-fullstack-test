@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 async function seed() {
   const email = "yotam@ktrust.com";
+  const role = "admin";
 
   // cleanup the existing database
   await prisma.user.delete({ where: { email } }).catch(() => {
@@ -13,7 +14,7 @@ async function seed() {
 
   const hashedPassword = await bcrypt.hash("ktrust12", 10);
 
-  const user = await prisma.user.create({
+  await prisma.user.create({
     data: {
       email,
       password: {
@@ -21,13 +22,7 @@ async function seed() {
           hash: hashedPassword,
         },
       },
-    },
-  });
-
-  await prisma.role.create({
-    data: {
-      title: "admin",
-      userId: user.id,
+      role,
     },
   });
 
