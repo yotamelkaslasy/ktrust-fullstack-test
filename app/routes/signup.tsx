@@ -71,7 +71,7 @@ export const meta: MetaFunction = () => {
   };
 };
 
-export default function Join() {
+export default function Signup() {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const actionData = useActionData<typeof action>();
@@ -127,6 +127,8 @@ export default function Join() {
               {actionData.errors.password}
             </div>
           )}
+
+          <input type="hidden" name="redirectTo" value={redirectTo} />
 
           <button
             type="submit"
