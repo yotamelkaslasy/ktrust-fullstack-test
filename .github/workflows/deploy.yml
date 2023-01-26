@@ -205,7 +205,9 @@ jobs:
         with:
           args: "deploy --app ${{ steps.app_name.outputs.value }}-staging --image registry.fly.io/${{ steps.app_name.outputs.value }}:${{ github.ref_name }}-${{ github.sha }}"
         env:
+          DATABASE_URL: ${{ secrets.DATABASE_DEV_URL }}
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
 
       - name: 🚀 Deploy Production
         if: ${{ github.ref == 'refs/heads/main' }}
@@ -213,4 +215,6 @@ jobs:
         with:
           args: "deploy --image registry.fly.io/${{ steps.app_name.outputs.value }}:${{ github.ref_name }}-${{ github.sha }}"
         env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
