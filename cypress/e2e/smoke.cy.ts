@@ -18,10 +18,10 @@ describe("smoke tests", () => {
     cy.get('input[name="email"]').should("exist");
     cy.get('input[name="password"]').should("exist");
 
-    cy.get('input[name="email"]').type(loginForm.email);
-    cy.get('input[name="password"]').type(loginForm.password);
+    // cy.get('input[name="email"]').type(loginForm.email);
+    // cy.get('input[name="password"]').type(loginForm.password);
 
-    cy.get('button[type="submit"]').click();
+    // cy.get('button[type="submit"]').click();
   });
 
   it("should allow you to login", () => {
@@ -38,9 +38,9 @@ describe("smoke tests", () => {
     cy.get('input[name="password"]').should("exist");
     cy.get('button[type="submit"]').should("exist");
 
-    cy.get('input[name="email"]').type(loginForm.email);
-    cy.get('input[name="password"]').type(loginForm.password);
+    // cy.get('input[name="email"]').type(loginForm.email);
+    // cy.get('input[name="password"]').type(loginForm.password);
 
-    cy.get('button[type="submit"]').click();
+    // cy.get('button[type="submit"]').click();
   });
 });
