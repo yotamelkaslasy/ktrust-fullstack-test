@@ -7,7 +7,7 @@ export default function Nav(): JSX.Element {
   const isAdmin = user?.role === "admin";
 
   return (
-    <div className="flex h-[75px] w-screen bg-slate-200 px-8 py-2">
+    <div className="flex h-[75px] w-full bg-slate-200 px-8 py-2">
       <div className="flex w-full items-center justify-between">
         <span>
           <span className="pr-2">Hi {isAdmin ? "Admin" : "User"},</span>

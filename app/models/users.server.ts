@@ -13,7 +13,3 @@ export async function getAllUsers(request: Request) {
 
   throw await logout(request);
 }
-
-export async function deleteUserByEmail(email: string) {
-  return prisma.user.delete({ where: { email } });
-}
