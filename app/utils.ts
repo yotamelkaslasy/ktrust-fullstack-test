@@ -45,7 +45,17 @@ export function useMatchesData(
 }
 
 function isUser(user: any): user is User {
-  return user && typeof user === "object" && typeof user.email === "string";
+  return (
+    user &&
+    typeof user === "object" &&
+    typeof user.email === "string" &&
+    typeof user.role === "string"
+  );
+}
+
+export function useIsAdminUser() {
+  const data = useMatchesData("root");
+  return isUser(data?.user) && data?.user.role === "admin";
 }
 
 export function useOptionalUser(): User | undefined {
