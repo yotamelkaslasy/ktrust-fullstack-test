@@ -161,8 +161,8 @@ export default function Signup() {
           onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
             setRole(event.target.value);
           }}
-          aria-invalid={actionData?.errors?.password ? true : undefined}
-          aria-describedby="password-error"
+          aria-invalid={actionData?.errors?.role ? true : undefined}
+          aria-describedby="role-error"
         />
         {actionData?.errors?.role && (
           <div className="pt-1 text-red-700" id="role-error">
