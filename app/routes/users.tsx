@@ -1,6 +1,12 @@
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
+import bcrypt from "bcryptjs";
 import { json } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useTransition,
+} from "@remix-run/react";
 import { useState, useEffect, useRef } from "react";
 
 import { prisma } from "~/db.server";
@@ -103,6 +109,9 @@ export async function action({ request }: ActionArgs) {
     return createUser(email, password, role);
   }
 
+  if (_action === "edit") {
+  }
+
   if (_action === "delete") {
     return await prisma.user.delete({
       where: {
@@ -123,10 +132,22 @@ export default function Users() {
   const actionData = useActionData<actionData>();
   const isAdmin = useIsAdminUser();
   const [role, setRole] = useState("admin");
+  const transition = useTransition();
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const roleRef = useRef<HTMLSelectElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const isAdding =
+    transition.state === "submitting" &&
+    transition.submission.formData.get("_action") === "create";
+
+  useEffect(() => {
+    if (!isAdding) {
+      formRef.current?.reset();
+    }
+  }, [isAdding]);
 
   useEffect(() => {
     if (actionData?.errors?.email) {
@@ -159,18 +180,18 @@ export default function Users() {
                   <div>Role: {user.role}</div>
                   {isAdmin && (
                     <span>
-                      {/* <Form method="post" className="inline">
+                      <Form method="post" className="inline">
                         <input type="hidden" name="id" value={user.id} />
                         <button
                           type="submit"
                           name="_action"
                           value="edit"
                           disabled
-                          className="mt-2 ml-2 rounded bg-purple-500 py-1 px-2 text-xs text-white hover:bg-purple-600 focus:bg-purple-400"
+                          className="mt-2 mr-2 rounded bg-purple-500 py-1 px-2 text-xs text-white hover:bg-purple-600 focus:bg-purple-400"
                         >
                           Edit User
                         </button>
-                      </Form> */}
+                      </Form>
                       <Form method="post" className="inline">
                         <input type="hidden" name="id" value={user.id} />
                         <button
@@ -192,6 +213,7 @@ export default function Users() {
             <li className="flex flex-col">
               <div>Admins can create new users.</div>
               <Form
+                ref={formRef}
                 method="post"
                 className="mt-4 flex flex-col items-center border p-2"
                 style={{ maxWidth: "500px" }}
@@ -249,7 +271,7 @@ export default function Users() {
                   value="create"
                   className="mt-4 rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
                 >
-                  Create User
+                  {isAdding ? "Creating User..." : "Create User"}
                 </button>
               </Form>
             </li>

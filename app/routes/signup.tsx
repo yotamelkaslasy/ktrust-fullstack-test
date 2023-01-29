@@ -1,6 +1,12 @@
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useActionData,
+  useSearchParams,
+  useTransition,
+} from "@remix-run/react";
 import { useRef, useEffect, useState } from "react";
 
 import { getUserId, createUserSession } from "~/session.server";
@@ -98,11 +104,13 @@ export const meta: MetaFunction = () => {
 export default function Signup() {
   const [role, setRole] = useState("admin");
   const [searchParams] = useSearchParams();
+  const transition = useTransition();
   const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const actionData = useActionData<typeof action>();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const roleRef = useRef<HTMLSelectElement>(null);
+  const busy = transition.submission;
 
   useEffect(() => {
     if (actionData?.errors?.email) {
@@ -176,7 +184,7 @@ export default function Signup() {
           type="submit"
           className="mt-4 rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
         >
-          Signup
+          {busy ? "Signing up..." : "Signup"}
         </button>
 
         <div className="mt-4 flex items-center justify-center">
